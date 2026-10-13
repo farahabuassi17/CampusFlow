@@ -1,8 +1,11 @@
+
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using CampusFlow.Mvc.Models;
-using CampusFlow.Mvc.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using CampusFlow.Mvc.Models;
+using CampusFlow.Mvc.Models.Enums;
+using CampusFlow.Mvc.ViewModels;
 
 namespace CampusFlow.Mvc.Controllers;
 
@@ -11,40 +14,38 @@ public class UserController : Controller
 {
     private readonly UserManager<User> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
+    private readonly IMapper _mapper;
 
     public UserController(
         UserManager<User> userManager,
-        RoleManager<IdentityRole> roleManager)
+        RoleManager<IdentityRole> roleManager,
+        IMapper mapper)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _mapper = mapper;
     }
 
+    // Display all active users
     public IActionResult Index()
     {
         var users = _userManager.Users
             .Where(u => !u.IsDelete)
-            .Select(u => new UserViewModel
-            {
-                Id = u.Id,
-                UserName = u.UserName,
-                Email = u.Email,
-                CreatedAt = u.CreatedAt,
-                IsDelete = u.IsDelete,
-                UserType = u.UserType
-            })
             .ToList();
 
+        var usersVm = _mapper.Map<List<UserViewModel>>(users);
 
-        return View(users);
+        return View(usersVm);
     }
 
+    // Display Create form
     [HttpGet]
     public IActionResult Create()
     {
         return View();
     }
 
+    // Create a new user
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CreateUserViewModel model)
@@ -54,12 +55,9 @@ public class UserController : Controller
             return View(model);
         }
 
-        var user = new User
-        {
-            UserName = model.UserName,
-            Email = model.Email,
-            UserType = CampusFlow.Mvc.Models.Enums.UserType.User
-        };
+        var user = _mapper.Map<User>(model);
+
+        user.UserType = UserType.User;
 
         var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -88,6 +86,8 @@ public class UserController : Controller
         return View(model);
     }
 
+    // Display Edit form
+
     [HttpGet]
     public async Task<IActionResult> Edit(string id)
     {
@@ -98,16 +98,12 @@ public class UserController : Controller
             return NotFound();
         }
 
-        var model = new EditUserViewModel
-        {
-            Id = user.Id,
-            UserName = user.UserName ?? string.Empty,
-            Email = user.Email ?? string.Empty
-        };
+        var model = _mapper.Map<EditUserViewModel>(user);
 
         return View(model);
     }
 
+    // Update user information
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(EditUserViewModel model)
@@ -124,8 +120,7 @@ public class UserController : Controller
             return NotFound();
         }
 
-        user.UserName = model.UserName;
-        user.Email = model.Email;
+        _mapper.Map(model, user);
 
         var result = await _userManager.UpdateAsync(user);
 
@@ -142,6 +137,7 @@ public class UserController : Controller
         return View(model);
     }
 
+    // Soft delete a user
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(string id)
@@ -153,11 +149,13 @@ public class UserController : Controller
             return NotFound();
         }
 
+        // Prevent admin from deleting their own account
         if (user.Id == _userManager.GetUserId(User))
         {
             return BadRequest("You cannot delete your own account.");
         }
 
+        // Prevent deletion of admin accounts
         if (await _userManager.IsInRoleAsync(user, "Admin"))
         {
             return BadRequest("Admin accounts cannot be deleted.");
@@ -174,5 +172,4 @@ public class UserController : Controller
 
         return BadRequest("Failed to delete user.");
     }
-
 }
