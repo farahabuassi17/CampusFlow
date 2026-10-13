@@ -1,0 +1,42 @@
+@model CampusFlow.Mvc.Models.Course
+
+<div class="container mt-4">
+
+    <h1>Course Details</h1>
+    <p class="text-muted">View course information</p>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+
+            <div class="mb-3">
+                <strong>Course ID:</strong>
+                <span>@Model.CourseId</span>
+            </div>
+
+            <div class="mb-3">
+                <strong>Course Name:</strong>
+                <span>@Model.Name</span>
+            </div>
+
+            <div class="mb-3">
+                <strong>Credit Hours:</strong>
+                <span>@Model.CreditHours</span>
+            </div>
+
+            <a asp-controller="Courses"
+               asp-action="Edit"
+               asp-route-id="@Model.CourseId"
+               class="btn btn-primary">
+                Edit
+            </a>
+
+            <a asp-controller="Courses"
+               asp-action="Index"
+               class="btn btn-secondary">
+                Back to Courses
+            </a>
+
+        </div>
+    </div>
+
+</div>

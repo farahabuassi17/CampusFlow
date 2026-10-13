@@ -1,0 +1,55 @@
+@model IEnumerable<CampusFlow.Mvc.Models.Enrollment>
+
+@{
+    ViewData["Title"] = "Enrollments";
+}
+
+<h2>Enrollments</h2>
+@if (User.IsInRole("Admin"))
+{
+    <a asp-controller="Enrollment" asp-action="Create" class="btn btn-primary mb-3">
+        Create Enrollment
+    </a>
+}
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Enrollment ID</th>
+            <th>Student Name</th>
+            <th>Course Name</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Actions</th>
+            }
+            
+        </thead>
+        <tbody>
+            @foreach (var enrollment in Model)
+            {
+                <tr>
+                    <td>@enrollment.EnrollmentId</td>
+                    <td>@enrollment.Student.Name</td>
+                    <td>@enrollment.Course.Name</td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@enrollment.EnrollmentId" class="btn btn-warning btn-sm">
+                                Edit
+                            </a>
+
+                            <form asp-action="Delete" asp-route-id="@enrollment.EnrollmentId" method="post" class="d-inline"
+                                  onsubmit="return confirm('Are you sure you want to delete this enrollment?');">
+
+                                @Html.AntiForgeryToken()
+
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+    </table>

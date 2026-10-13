@@ -1,0 +1,50 @@
+@model CampusFlow.Mvc.Models.Course
+
+<div class="container mt-4">
+
+    <h1>Add Course</h1>
+    <p class="text-muted">Add a new course to CampusFlow</p>
+
+    <div class="card shadow-sm mt-4">
+        <div class="card-body">
+
+            <form asp-controller="Courses" asp-action="Create" method="post">
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label">
+                        Course Name
+                    </label>
+
+                    <input asp-for="Name" class="form-control" placeholder="Enter course name" />
+
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CreditHours" class="form-label">
+                        Credit Hours
+                    </label>
+
+                    <input asp-for="CreditHours" class="form-control" />
+
+                    <span asp-validation-for="CreditHours" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    Add Course
+                </button>
+
+                <a asp-controller="Courses" asp-action="Index" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

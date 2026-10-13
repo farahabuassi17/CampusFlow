@@ -1,0 +1,186 @@
+@model List<CampusFlow.Mvc.Models.Student>
+
+@{
+    ViewData["Title"] = "Students";
+}
+
+<div class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-1">Students</h2>
+            <p class="text-muted mb-0">
+                Manage all students in CampusFlow
+            </p>
+        </div>
+
+        <a asp-controller="Students" asp-action="Create" class="btn btn-primary">
+            Add Student
+        </a>
+    </div>
+
+    <!-- Success Message -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <!-- Error Message -->
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+
+            <button type="button" class="btn-close" data-bs-dismiss="alert">
+            </button>
+        </div>
+    }
+
+    <!-- Search and Filter -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+
+            <form asp-controller="Students" asp-action="Index" method="get">
+
+                <div class="row g-3 align-items-end">
+
+                    <!-- Search -->
+                    <div class="col-md-5">
+                        <label class="form-label">
+                            Search
+                        </label>
+
+                        <input type="text" name="searchTerm" value="@ViewBag.SearchTerm" class="form-control"
+                               placeholder="Search by name or email" />
+                    </div>
+
+                    <!-- Course Filter -->
+                    <div class="col-md-4">
+                        <label class="form-label">
+                            Course
+                        </label>
+
+                        <select name="courseId" asp-items="ViewBag.CourseList" class="form-select">
+
+                            <option value="">
+                                All Courses
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">
+                            Search
+                        </button>
+
+                        <a asp-controller="Students" asp-action="Index" class="btn btn-secondary">
+                            Reset
+                        </a>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            @if (Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Course</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var student in Model)
+                            {
+                                <tr>
+
+                                    <!-- Student Image -->
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(student.ImagePath))
+                                        {
+                                            <img src="@student.ImagePath" alt="@student.Name" width="60" height="60"
+                                                 class="rounded-circle" style="object-fit: cover;" />
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                No Image
+                                            </span>
+                                        }
+                                    </td>
+
+                                    <!-- Name -->
+                                    <td>
+                                        @student.Name
+                                    </td>
+
+                                    <!-- Email -->
+                                    <td>
+                                        @student.Email
+                                    </td>
+
+                                    <!-- Course -->
+                                    <td>
+                                        @student.Course?.Name
+                                    </td>
+
+                                    <!-- Actions -->
+                                    <td>
+                                        <a asp-controller="Students" asp-action="Details" asp-route-id="@student.StudentId"
+                                           class="btn btn-sm btn-info">
+                                            Details
+                                        </a>
+
+                                        <a asp-controller="Students" asp-action="Edit" asp-route-id="@student.StudentId"
+                                           class="btn btn-sm btn-warning">
+                                            Edit
+                                        </a>
+
+                                        <a asp-controller="Students" asp-action="Delete" asp-route-id="@student.StudentId"
+                                           class="btn btn-sm btn-danger">
+                                            Delete
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-4">
+                    <p class="text-muted mb-0">
+                        No students found.
+                    </p>
+                </div>
+            }
+
+        </div>
+    </div>
+
+</div>

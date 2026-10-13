@@ -1,0 +1,38 @@
+@model CampusFlow.Mvc.Models.Course
+
+<div class="container mt-4">
+
+    <h1>Delete Course</h1>
+
+    <div class="alert alert-danger mt-3">
+        Are you sure you want to delete this course?
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h4>@Model.Name</h4>
+
+            <p>
+                <strong>Credit Hours:</strong>
+                @Model.CreditHours
+            </p>
+
+            <form asp-controller="Courses" asp-action="Delete" asp-route-id="@Model.CourseId" method="post">
+
+                <input type="hidden" asp-for="CourseId" />
+
+                <button type="submit" class="btn btn-danger">
+                    Delete
+                </button>
+
+                <a asp-controller="Courses" asp-action="Index" class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>

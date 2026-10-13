@@ -1,0 +1,27 @@
+# Build files
+bin/
+obj/
+Debug/
+Release/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# VS Code
+.vscode/
+
+# Local configuration and secrets
+appsettings.Development.json
+secrets.json
+.env
+.env.*
+
+# Local databases
+*.db
+*.db-shm
+*.db-wal
+
+# Uploaded student images
+wwwroot/uploads/students/*

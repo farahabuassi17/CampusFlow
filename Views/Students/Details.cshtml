@@ -1,0 +1,84 @@
+@model CampusFlow.Mvc.Models.Student
+
+@{
+    ViewData["Title"] = "Student Details";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+                    <h3 class="mb-0">Student Details</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <!-- Student Image -->
+                    <div class="text-center mb-4">
+
+                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                        {
+                            <img src="@Model.ImagePath" alt="@Model.Name" width="150" height="150"
+                                 class="rounded-circle shadow-sm" style="object-fit: cover;" />
+                        }
+                        else
+                        {
+                            <div class="text-muted">
+                                No Image
+                            </div>
+                        }
+
+                    </div>
+
+                    <!-- Student ID -->
+                    <div class="mb-3">
+                        <strong>Student ID:</strong>
+                        <span>@Model.StudentId</span>
+                    </div>
+
+                    <!-- Student Name -->
+                    <div class="mb-3">
+                        <strong>Name:</strong>
+                        <span>@Model.Name</span>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <strong>Email:</strong>
+                        <span>@Model.Email</span>
+                    </div>
+
+                    <!-- Course -->
+                    <div class="mb-3">
+                        <strong>Course:</strong>
+                        <span>@Model.Course?.Name</span>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="mt-4">
+
+                        <a asp-controller="Students" asp-action="Edit" asp-route-id="@Model.StudentId"
+                           class="btn btn-warning">
+                            Edit
+                        </a>
+
+                        <a asp-controller="Students" asp-action="Index" class="btn btn-secondary">
+                            Back to Students
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

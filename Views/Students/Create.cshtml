@@ -1,0 +1,104 @@
+@model CampusFlow.Mvc.Models.Student
+
+@{
+    ViewData["Title"] = "Add Student";
+}
+
+<div class="container mt-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-7">
+
+            <div class="card shadow">
+
+                <div class="card-header">
+                    <h3 class="mb-0">Add New Student</h3>
+                </div>
+
+                <div class="card-body">
+
+                    <form asp-controller="Students" asp-action="Create" method="post" enctype="multipart/form-data">
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3">
+                        </div>
+
+                        <!-- Student Name -->
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">
+                                Student Name
+                            </label>
+
+                            <input asp-for="Name" class="form-control" placeholder="Enter student name" />
+
+                            <span asp-validation-for="Name" class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Email -->
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label">
+                                Email
+                            </label>
+
+                            <input asp-for="Email" class="form-control" placeholder="Enter student email" />
+
+                            <span asp-validation-for="Email" class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Course -->
+                        <div class="mb-3">
+                            <label asp-for="CourseId" class="form-label">
+                                Course
+                            </label>
+
+                            <select asp-for="CourseId" asp-items="ViewBag.CourseList" class="form-select">
+
+                                <option value="">
+                                    -- Select Course --
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="CourseId" class="text-danger">
+                            </span>
+                        </div>
+
+                        <!-- Student Image -->
+                        <div class="mb-3">
+                            <label for="imageFile" class="form-label">
+                                Student Image
+                            </label>
+
+                            <input type="file" id="imageFile" name="imageFile" class="form-control" accept="image/*" />
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+
+                            <button type="submit" class="btn btn-primary">
+                                Add Student
+                            </button>
+
+                            <a asp-controller="Students" asp-action="Index" class="btn btn-secondary">
+                                Back to Students
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
